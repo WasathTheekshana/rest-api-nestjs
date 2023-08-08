@@ -5,19 +5,19 @@ import { BookCategory } from 'src/enum/book-category';
   timestamps: true,
 })
 export class Book {
-  @Prop({ required: true })
+  @Prop()
   title: string;
 
-  @Prop({ required: true })
+  @Prop()
   description: string;
 
-  @Prop({ required: true })
+  @Prop()
   author: string;
 
-  @Prop({ required: true })
+  @Prop()
   price: number;
 
-  @Prop({ required: true })
+  @Prop()
   category: BookCategory;
 }
 
