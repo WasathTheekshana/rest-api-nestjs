@@ -1,7 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { BookCategory } from 'src/enum/book-category';
 
-@Schema({ timestamps: true })
+@Schema({
+  timestamps: true,
+})
 export class Book {
   @Prop()
   title: string;

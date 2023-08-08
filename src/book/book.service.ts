@@ -10,8 +10,15 @@ export class BookService {
     private bookModel: mongoose.Model<Book>,
   ) {}
 
+  //Read all books
   async findAll(): Promise<Book[]> {
     const books = await this.bookModel.find();
     return books;
+  }
+
+  //Create a book
+  async create(book: Book): Promise<Book> {
+    const res = await this.bookModel.create(book);
+    return res;
   }
 }
