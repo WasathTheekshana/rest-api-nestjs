@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { Book } from './schemas/book.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
@@ -13,11 +17,9 @@ export class BookService {
 
   //Read all books
   async findAll(query: Query): Promise<Book[]> {
-    
-    const resPerPage = 2 // results per page
-    const currentPage = Number(query.page) || 1 
-    const skip = resPerPage * (currentPage - 1) 
-
+    const resPerPage = 2; // results per page
+    const currentPage = Number(query.page) || 1;
+    const skip = resPerPage * (currentPage - 1);
 
     const keyword = query.keyword
       ? {
@@ -28,7 +30,10 @@ export class BookService {
         }
       : {};
 
-    const books = await this.bookModel.find({ ...keyword }).limit(resPerPage).skip(skip);
+    const books = await this.bookModel
+      .find({ ...keyword })
+      .limit(resPerPage)
+      .skip(skip);
     return books;
   }
 
@@ -40,8 +45,12 @@ export class BookService {
 
   //Get a book by id
   async findById(id: string): Promise<Book> {
-    const book = await this.bookModel.findById(id);
+    const isValidId = mongoose.isValidObjectId(id);
+    if (!isValidId) {
+      throw new BadRequestException('Invalid databse id');
+    }
 
+    const book = await this.bookModel.findById(id);
     if (!book) {
       throw new NotFoundException('Book not found');
     }
